@@ -50,6 +50,9 @@ router.post('/add', upload.single('image'), async (req, res) => {
             message: "recipe created successfully"
         })
     } catch (error) {
+        if (error?.code === 11000) res.status(400).send({
+            message: "Recipe Name Already Exists"
+        })
         console.log(error);
     }
 })
@@ -73,6 +76,9 @@ router.put('/update/:id', upload.single('image'), async (req, res) => {
             message: "updated recipe successfully"
         })
     } catch (error) {
+        if (error?.code === 11000) res.status(400).send({
+            message: "Recipe Name Already Exists"
+        })
         console.log(error);
     }
 })
