@@ -1,8 +1,7 @@
 const router = require('express').Router();
 const Recipe = require('./models/Recipe');
-const multer = require('multer');
-const cloudinary = require('./upload');
-const upload = require('./multer');
+const cloudinary = require('./config/cloudinaryUpload');
+const upload = require('./config/multerUpload');
 
 
 // @GET /recipes
