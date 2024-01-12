@@ -8,6 +8,12 @@ const upload = require('./config/multerUpload');
 router.get('/', async (req, res) => {
     try {
         const recipes = await Recipe.find();
+
+        if (recipes.length === 0) {
+            res.status(200).send({
+                message: "Database Empty"
+            })
+        }
         res.send(recipes);
     } catch (error) {
         console.log(error);
@@ -20,8 +26,18 @@ router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const recipe = await Recipe.findById(id);
-        res.send(recipe);
-    } catch (error) {
+
+        // if request is good but there is no recipe with the provided id
+        if (!recipe) {
+            res.status(404).send({
+                message: "Not Found"
+            })
+        }
+
+        // otherwise return the recipe
+        res.status(200).send(recipe);
+    
+    } catch(error) {
         console.log(error);
     }
 })
@@ -86,11 +102,10 @@ router.put('/update/:id', upload.single('image'), async (req, res) => {
 router.delete('/delete/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const response = await Recipe.findByIdAndDelete(id);
+        await Recipe.findByIdAndDelete(id);
         res.status(200).send({
             message: "recipe deleted successfully"
         })
-        console.log(response);
     } catch (error) {
         console.log(error);
     }
