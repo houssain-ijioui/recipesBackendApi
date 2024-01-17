@@ -1,7 +1,9 @@
 const User = require('../models/User');
-const validateUser = require('../functions/userVlidation');
+const { validateUserCreation, validateUserLogin } = require('../functions/userVlidation');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
+const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
 const signup = async (req, res) => {
     const userData = req.body;
@@ -10,7 +12,7 @@ const signup = async (req, res) => {
 
     try {
         // check if provided data is valid
-        const validation = validateUser(userData);
+        const validation = validateUserCreation(userData);
         
 
         if (validation.error) {
@@ -34,7 +36,7 @@ const signup = async (req, res) => {
         await user.save();
 
         return res.status(201).send({
-            message: "User Created Successfully!"
+            message: "User Registered"
         })
 
     } catch (error) {
@@ -49,7 +51,18 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
     const { username, password } = req.body;
 
+    console.log(username, password);
+
     try {
+        const validation = validateUserLogin(req.body);
+
+        if (validation.error) {
+            return res.status(400).send({
+                message: "Validation Failed",
+                errors: validation.error.details
+            })
+        }
+
         const user = await User.findOne({ username: username });
 
         if (!user) {
@@ -66,14 +79,24 @@ const login = async (req, res) => {
             })
         }
 
+        const token = jwt.sign({ userId: user.id }, ACCESS_TOKEN_SECRET)
+
+        console.log(req.header);
         res.status(200).send({
-            message: "Logged In"
+            token: token
         })
     } catch (error) {
         res.status(500).send({
             message: "Oops something went wrong!"
         })
+        console.log(error);
     }
+}
+
+
+const getAllUsers = async (req, res) => {
+    const users = await User.find();
+    res.send(users)
 }
 
 
@@ -81,5 +104,6 @@ const login = async (req, res) => {
 
 module.exports = {
     signup,
-    login
+    login,
+    getAllUsers
 }
