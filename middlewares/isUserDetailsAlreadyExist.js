@@ -14,7 +14,7 @@ const isUserDetailsAlreadyExist = async (req, res, next) => {
         }
 
         if (checkEmail) {
-            return res.status(500).send({
+            return res.status(401).send({
                 message: "Failed! Email is already in use."
             });
         }
