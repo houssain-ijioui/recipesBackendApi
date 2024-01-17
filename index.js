@@ -5,8 +5,7 @@ const Database = require("./config/db");
 
 const recipeRoutes = require('./routes/recipe.route');
 const authRoutes = require('./routes/auth.route');
-
-
+const notFound = require('./middlewares/errorMiddlware');
 
 const app = express()
 
@@ -35,8 +34,10 @@ connection.connectDB();
 app.use('/recipes', recipeRoutes);
 
 // authentification
-app.use('/api/auth/', authRoutes);
+app.use('/api/users/', authRoutes);
 
+// Route does not exist
+app.use(notFound);
 
 const port = 8000;
 app.listen(port, console.log(`Listening on port ${port}`));
