@@ -1,11 +1,10 @@
-const router = require('express').Router();
-const Recipe = require('./models/Recipe');
-const cloudinary = require('./config/cloudinaryUpload');
-const upload = require('./config/multerUpload');
+const Recipe = require('../models/Recipe');
+const cloudinary = require('../config/cloudinaryUpload');
+const upload = require('../config/multerUpload');
 
 
-// @GET /recipes
-router.get('/', async (req, res) => {
+
+const getAllRecipes = async (req, res) => {
     try {
         const recipes = await Recipe.find();
 
@@ -16,13 +15,14 @@ router.get('/', async (req, res) => {
         }
         res.send(recipes);
     } catch (error) {
+        res.status(500).send("Oops Something went wrong!")
         console.log(error);
     }
-})
+}
 
 
-// @GET /recipes:id
-router.get('/:id', async (req, res) => {
+
+const getRecipeById = async (req, res) => {
     const { id } = req.params;
     try {
         const recipe = await Recipe.findById(id);
@@ -40,11 +40,10 @@ router.get('/:id', async (req, res) => {
     } catch(error) {
         console.log(error);
     }
-})
+}
 
 
-// @POST /add_recepy
-router.post('/add', upload.single('image'), async (req, res) => {
+const createRecipe = async (req, res) => {
     const { name, category, ingredients, popularity } = req.body;
     try {
         // upload image to cloudinary
@@ -70,11 +69,9 @@ router.post('/add', upload.single('image'), async (req, res) => {
         })
         console.log(error);
     }
-})
+}
 
-
-// @PUT /update_recepy/:id
-router.put('/update/:id', upload.single('image'), async (req, res) => {
+const updateRecipe = async (req, res) => {
     const { id } = req.params;
     const { name, category, ingredients, popularity } = req.body;
     const result = await cloudinary.uploader.upload(req.file.path)
@@ -96,10 +93,9 @@ router.put('/update/:id', upload.single('image'), async (req, res) => {
         })
         console.log(error);
     }
-})
+}
 
-// @DELETE /delete/:id
-router.delete('/delete/:id', async (req, res) => {
+const deleteRecipe = async (req, res) => {
     const { id } = req.params;
     try {
         await Recipe.findByIdAndDelete(id);
@@ -109,17 +105,13 @@ router.delete('/delete/:id', async (req, res) => {
     } catch (error) {
         console.log(error);
     }
-})
+}
 
-// @GET /reciapes/category/:category
-router.get('/categories/:category', async (req, res) => {
-    const { category } = req.params;
-    try {
-        const recipesByCategory = await Recipe.find({ category: category });
-        res.send(recipesByCategory);
-    } catch (error) {
-        console.log(error);
-    }
-})
 
-module.exports = router;
+module.exports = {
+    getAllRecipes,
+    getRecipeById,
+    createRecipe,
+    updateRecipe,
+    deleteRecipe
+};

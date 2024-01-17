@@ -3,7 +3,7 @@ const express = require('express');
 const expressRateLimit = require('express-rate-limit');
 const Database = require("./config/db");
 
-const routes = require('./routes');
+const recipeRoutes = require('./routes/recipe.route');
 
 const app = express()
 
@@ -29,7 +29,7 @@ connection.connectDB();
 
 
 // routes
-app.use('/recipes', routes);
+app.use('/recipes', recipeRoutes);
 
 
 const port = 8000;
