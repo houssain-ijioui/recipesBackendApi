@@ -4,6 +4,7 @@ const expressRateLimit = require('express-rate-limit');
 const Database = require("./config/db");
 
 const recipeRoutes = require('./routes/recipe.route');
+const authRoutes = require('./routes/auth.route');
 
 const app = express()
 
@@ -30,6 +31,9 @@ connection.connectDB();
 
 // routes
 app.use('/recipes', recipeRoutes);
+
+// authentification
+app.use('/api/auth/', authRoutes);
 
 
 const port = 8000;

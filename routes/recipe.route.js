@@ -1,6 +1,4 @@
 const router = require('express').Router();
-const Recipe = require('../models/Recipe');
-const cloudinary = require('../config/cloudinaryUpload');
 const upload = require('../config/multerUpload');
 const { getAllRecipes, getRecipeById, createRecipe, updateRecipe, deleteRecipe, filterByCategory } = require('../controllers/recipe.controller');
 
