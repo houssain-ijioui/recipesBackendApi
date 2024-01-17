@@ -108,10 +108,22 @@ const deleteRecipe = async (req, res) => {
 }
 
 
+const filterByCategory = async(req, res) => {
+    const { category } = req.params;
+    try {
+        const recipesByCategory = await Recipe.find({ category: category });
+        res.send(recipesByCategory);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
 module.exports = {
     getAllRecipes,
     getRecipeById,
     createRecipe,
     updateRecipe,
-    deleteRecipe
+    deleteRecipe,
+    filterByCategory
 };
