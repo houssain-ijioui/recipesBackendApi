@@ -20,10 +20,10 @@ const signup = async (req, res) => {
             })
         }
 
-        // hash the password
-        const salt = await bcrypt.genSalt(10);
+        // // hash the password
+        // const salt = await bcrypt.genSalt(10);
 
-        const hashedPassword = await bcrypt.hash(password, salt)
+        const hashedPassword = await bcrypt.hash(password, 10)
 
         const user = new User({
             username: username,
@@ -33,6 +33,42 @@ const signup = async (req, res) => {
 
         await user.save();
 
+        return res.status(201).send({
+            message: "User Created Successfully!"
+        })
+
+    } catch (error) {
+        res.status(500).send({
+            message: "Oops something went wrong!"
+        })
+    }
+}
+
+
+
+const login = async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        const user = await User.findOne({ username: username });
+
+        if (!user) {
+            return res.status(400).send({
+                message: "Username Not Found!"
+            })
+        }
+
+        const comparePassword = await bcrypt.compare(password, user.password);
+
+        if (!comparePassword) {
+            return res.status(401).send({
+                message: "Incorrect Password"
+            })
+        }
+
+        res.status(200).send({
+            message: "Logged In"
+        })
     } catch (error) {
         res.status(500).send({
             message: "Oops something went wrong!"
@@ -44,5 +80,6 @@ const signup = async (req, res) => {
 
 
 module.exports = {
-    signup
+    signup,
+    login
 }
