@@ -1,5 +1,4 @@
 
-
 const signup = async (req, res) => {
     res.send('ok');
 }

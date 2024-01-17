@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const { signup } = require('../controllers/auth.controller');
+const isUserDetailsAlreadyExist = require('../middlewares/isUserDetailsAlreadyExist');
 
 
 
-router.get('/signup', signup);
+router.post('/signup', isUserDetailsAlreadyExist, signup);
 
 
 
