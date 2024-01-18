@@ -1,16 +1,17 @@
 const router = require('express').Router();
 const { signup, login, getAllUsers } = require('../controllers/auth.controller');
 const isUserDetailsAlreadyExist = require('../middlewares/isUserDetailsAlreadyExist');
+const verifyToken = require('../middlewares/authMiddlware');
 
 
 // @POST /api/users
-router.post('/', isUserDetailsAlreadyExist, signup);
+router.post('/signup', isUserDetailsAlreadyExist, signup);
 
 // @POST /api/users/login
 router.post('/login', login);
 
 // @GET /api/users
-router.get('/', getAllUsers);
+router.get('/', verifyToken, getAllUsers);
 
 
 

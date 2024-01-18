@@ -51,8 +51,6 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
     const { username, password } = req.body;
 
-    console.log(username, password);
-
     try {
         const validation = validateUserLogin(req.body);
 
@@ -81,9 +79,8 @@ const login = async (req, res) => {
 
         const token = jwt.sign({ userId: user.id }, ACCESS_TOKEN_SECRET)
 
-        console.log(req.header);
-        res.status(200).send({
-            token: token
+        res.status(200).json({
+            token
         })
     } catch (error) {
         res.status(500).send({
