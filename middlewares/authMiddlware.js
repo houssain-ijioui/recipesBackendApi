@@ -21,11 +21,11 @@ verifyToken = (req, res, next) => {
         next()
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError && error.message === "invalid signature") {
-            res.status(401).send({
+            return res.status(401).send({
                 message: "Invalid Token"
             })
         } else {
-            res.status(500).send({
+            return res.status(500).send({
                 message: 'Oops something went wrong.'
             })
         }

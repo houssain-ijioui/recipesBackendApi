@@ -19,7 +19,7 @@ router.put('/update/:id', verifyToken, upload.single('image'), updateRecipe);
 // @DELETE /delete/:id
 router.delete('/delete/:id', verifyToken, deleteRecipe);
 
-// @GET /reciapes/category/:category
+// @GET /recipes/category/:category
 router.get('/categories/:category', filterByCategory);
 
 
