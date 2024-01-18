@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const { validateUserCreation, validateUserLogin } = require('../functions/userVlidation');
+const { validateUserCreation, validateUserLogin } = require('../validationFunctions/userVlidation');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
