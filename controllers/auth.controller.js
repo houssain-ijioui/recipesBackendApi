@@ -8,8 +8,7 @@ const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const signup = async (req, res) => {
     const userData = req.body;
     const { username, email, password } = req.body;
-
-
+    
     try {
         // check if provided data is valid
         const validation = validateUserCreation(userData);
@@ -77,7 +76,9 @@ const login = async (req, res) => {
             })
         }
 
-        const token = jwt.sign({ userId: user.id }, ACCESS_TOKEN_SECRET)
+        const token = jwt.sign({ userId: user.id }, ACCESS_TOKEN_SECRET);
+
+        req.session.token = token;
 
         res.status(200).json({
             token

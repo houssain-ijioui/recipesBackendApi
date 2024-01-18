@@ -10,6 +10,7 @@ router.post('/signup', isUserDetailsAlreadyExist, signup);
 // @POST /api/users/login
 router.post('/login', login);
 
+
 // @GET /api/users
 router.get('/', verifyToken, getAllUsers);
 

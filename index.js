@@ -1,11 +1,15 @@
 require('dotenv').config();
 const express = require('express');
 const expressRateLimit = require('express-rate-limit');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const Database = require("./config/db");
 
 const recipeRoutes = require('./routes/recipe.route');
 const authRoutes = require('./routes/auth.route');
 const notFound = require('./middlewares/errorMiddlware');
+
+const SESSION_SECRET = process.env.SESSION_SECRET;
 
 const app = express()
 
@@ -22,6 +26,16 @@ const limiter = expressRateLimit.rateLimit({
 })
 
 app.use(limiter);
+
+
+
+// Session
+app.use(session({
+    store: MongoStore.create({ mongoUrl: "mongodb://localhost:27017/user-sessions" }),
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true
+}));
 
 
 
