@@ -20,10 +20,15 @@ verifyToken = (req, res, next) => {
         req.userId = decoded.userId;
         next()
     } catch (error) {
-        console.log(error);
-        res.status(500).send({
-            message: "Oops something went wrong"
-        })
+        if (error instanceof jwt.JsonWebTokenError && error.message === "invalid signature") {
+            res.status(401).send({
+                message: "Invalid Token"
+            })
+        } else {
+            res.status(500).send({
+                message: 'Oops something went wrong.'
+            })
+        }
     }
 }
 
