@@ -31,7 +31,6 @@ app.use(limiter);
 
 // Session
 app.use(session({
-    store: MongoStore.create({ mongoUrl: "mongodb://localhost:27017/user-sessions" }),
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: true

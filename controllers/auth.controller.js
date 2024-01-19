@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const { validateUserCreation, validateUserLogin } = require('../validationFunctions/userVlidation');
+const { validateUserCreation, validateUserLogin } = require('../validationFunctions/userValidation');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -78,10 +78,9 @@ const login = async (req, res) => {
 
         const token = jwt.sign({ userId: user.id }, ACCESS_TOKEN_SECRET);
 
-        req.session.token = token;
-
-        res.status(200).json({
-            token
+        req.session.userToken = token;
+        res.status(200).send({
+            message: "Logged In",
         })
     } catch (error) {
         res.status(500).send({
@@ -92,16 +91,29 @@ const login = async (req, res) => {
 }
 
 
+const logout = async (req, res) => {
+    try {
+        req.session.destroy();
+        return res.status(200).send({
+            message: "Logged Out"
+        })
+    } catch (error) {
+        return res.status(500).send({
+            message: "Oops something went wrong"
+        })
+    }
+}
+
+
 const getAllUsers = async (req, res) => {
     const users = await User.find();
     res.send(users)
 }
 
 
-
-
 module.exports = {
     signup,
     login,
-    getAllUsers
+    getAllUsers,
+    logout
 }
