@@ -7,8 +7,8 @@ const Database = require("./config/db");
 const recipeRoutes = require('./routes/recipe.route');
 const authRoutes = require('./routes/auth.route');
 const notFound = require('./middlewares/errorMiddlware');
-
-const SESSION_SECRET = process.env.SESSION_SECRET;
+const swaggerUi = require('swagger-ui-express');
+const specs = require('./config/swagger');
 
 const app = express()
 
@@ -41,6 +41,10 @@ app.use('/recipes', recipeRoutes);
 
 // authentification
 app.use('/api/users/', authRoutes);
+
+// Serve Swagger UI at /api-docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
 
 // Route does not exist
 app.use(notFound);
