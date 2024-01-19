@@ -1,8 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const expressRateLimit = require('express-rate-limit');
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
+const cookieParser = require('cookie-parser');
 const Database = require("./config/db");
 
 const recipeRoutes = require('./routes/recipe.route');
@@ -20,7 +19,7 @@ app.use(express.json());
 // rate limit middleware
 const limiter = expressRateLimit.rateLimit({
     windowMs: 60 * 1000,
-    limit: 10,
+    limit: 100,
     standardHeaders: 'draft-7',
 	legacyHeaders: false,
 })
@@ -28,14 +27,8 @@ const limiter = expressRateLimit.rateLimit({
 app.use(limiter);
 
 
-
 // Session
-app.use(session({
-    secret: SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true
-}));
-
+app.use(cookieParser());
 
 
 // Connect to DB

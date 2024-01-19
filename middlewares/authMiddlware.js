@@ -4,7 +4,7 @@ const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 
 
 verifyToken = (req, res, next) => {
-    const token = req.session.userToken;
+    const token = req.cookies.accessToken;
 
     try {
         // if no token was provided
@@ -18,6 +18,7 @@ verifyToken = (req, res, next) => {
         const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
 
         req.userId = decoded.userId;
+
         next()
     } catch (error) {
         if (error instanceof jwt.JsonWebTokenError && error.message === "invalid signature") {

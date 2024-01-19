@@ -77,8 +77,8 @@ const login = async (req, res) => {
         }
 
         const token = jwt.sign({ userId: user.id }, ACCESS_TOKEN_SECRET);
+        res.cookie("accessToken", token, { maxAge: 1000 * 60 * 10, httpOnly: true });
 
-        req.session.userToken = token;
         res.status(200).send({
             message: "Logged In",
         })
@@ -93,7 +93,7 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
     try {
-        req.session.destroy();
+        res.clearCookie('accessToken');
         return res.status(200).send({
             message: "Logged Out"
         })
